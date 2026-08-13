@@ -139,7 +139,7 @@ de-identified. This repository never redistributes raw CDC files.
 
 ## Release v2.0.0 — npj Digital Medicine revision
 
-This version adds every analysis introduced in the major revision:
+This version adds every analysis introduced in this run:
 
 - `analysis/equivalence_rev.py` — paired-DeLong non-inferiority + TOST
   (pre-specified delta = 0.005, Holm), prediction correlations.
