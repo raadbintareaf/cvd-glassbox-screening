@@ -1,0 +1,15 @@
+# Demo-scale smoke config: tiny subsample, CPU models, 1 seed. Runs in the
+# development container / laptop in ~2 minutes. NEVER a source of paper numbers.
+inherit: default.yaml
+limit: 8000
+seeds: [0]
+tiers: [T1]
+models: [ebm, logreg, xgboost, lightgbm]
+faithfulness:
+  sizes: [25, 100]
+  n_resamples: 3
+  lime_max_size: 0
+  lime_resamples: 0
+  kernelshap_max_size: 100
+  top_k: 10
+tuning_trials: {xgboost: 3, lightgbm: 3, ebm: 2, mlp: 2, logreg: 2, logreg_spline: 2, tabpfn_v2: 0, tabicl: 0}

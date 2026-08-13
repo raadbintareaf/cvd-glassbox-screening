@@ -1,0 +1,2 @@
+defaults:
+  predict_batch: 20000

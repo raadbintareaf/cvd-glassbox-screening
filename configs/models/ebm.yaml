@@ -1,0 +1,5 @@
+defaults:
+  outer_bags: 14
+  interactions: 10
+  max_bins: 256
+  learning_rate: 0.01

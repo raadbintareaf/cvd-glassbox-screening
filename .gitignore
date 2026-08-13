@@ -1,0 +1,9 @@
+results/
+paper/
+data/
+*.pyc
+__pycache__/
+.ipynb_checkpoints/
+*.joblib
+*.parquet
+environment_freeze.txt

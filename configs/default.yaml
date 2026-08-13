@@ -1,0 +1,41 @@
+# Global experiment configuration (paper runs). CLI takes only --config/--seed
+# plus the grid coordinates (--tier/--model); everything else lives here.
+
+dataset: brfss2022            # development cohort
+data_dir: data/analytic
+results_dir: results
+
+split_fracs: [0.6, 0.2, 0.2]  # train / val / test, stratified
+seeds: [0, 1, 2, 3, 4]
+
+tiers: [T0, T1, T1_portable, T2, T1_nostroke]
+drop_stroke: false            # ablation switch (rerun T1 with true)
+
+models: [ebm, logreg, logreg_spline, xgboost, lightgbm, mlp, tabpfn_v2, tabicl]
+
+# Threshold rules are selected on VALIDATION and frozen before test.
+operating_rules:
+  - {name: screening, rule: sens_at, target: 0.85}
+  - {name: confirmatory, rule: spec_at, target: 0.90}
+fairness_rule: screening
+
+conformal_alpha: 0.1
+
+faithfulness:
+  sizes: [25, 100, 500, 2000, 10000]
+  n_resamples: 20
+  lime_max_size: 500
+  lime_resamples: 5
+  kernelshap_max_size: 2000
+  top_k: 10
+faithfulness_fm: tabicl
+
+tuning_trials:
+  xgboost: 30
+  lightgbm: 30
+  ebm: 15
+  mlp: 20
+  logreg: 15
+  logreg_spline: 15
+  tabpfn_v2: 0     # foundation models run at defaults by design
+  tabicl: 0

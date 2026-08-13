@@ -1,0 +1,17 @@
+{
+  "title": "cvd-glassbox-screening: leakage-tiered, fairness-audited benchmark of glass-box and tabular foundation models on BRFSS (code, v2.0.0)",
+  "upload_type": "software",
+  "description": "Complete analysis pipeline for a leakage-tiered, fairness-audited benchmark of ten model classes (logistic regression through EBM, gradient boosting, and the TabPFN v2 / TabICL tabular foundation models) on CDC BRFSS 2022-2023 self-reported myocardial infarction. Version 2.0.0 adds the major-revision analyses for npj Digital Medicine: seed-0 paired-DeLong non-inferiority and TOST equivalence engine (pre-specified delta = 0.005), the T1-ns stroke-exclusion tier, fairness v2 (common selection objective, equalise-TPR control arm, effective per-group thresholds, 1000-draw stratified paired bootstrap), conformal v2 (four-decimal coverage, empty-set accounting, split-validation optimism check, 18-39 carve-out hybrid), survey-weighted evaluation and weight-informed training, the FM-edge-by-weight-quintile test, LIME-on-EBM faithfulness, and a full timing/hardware manifest. Frozen experiment configurations under configs/ document the pre-specified protocol.",
+  "creators": [
+    {"name": "Bin Tareaf, Raad", "affiliation": "XU Exponential University of Applied Sciences; Abu Dhabi University"},
+    {"name": "Al-Rajab, Murad", "affiliation": "Abu Dhabi University"},
+    {"name": "Loucif, Samia", "affiliation": "Zayed University"},
+    {"name": "Ellaham, Samer"},
+    {"name": "Schmitz, Cedric", "affiliation": "XU Exponential University of Applied Sciences"}
+  ],
+  "license": "MIT",
+  "version": "2.0.0",
+  "keywords": ["cardiovascular screening", "BRFSS", "target leakage",
+    "explainable boosting machine", "tabular foundation models",
+    "algorithmic fairness", "conformal prediction", "glass-box models"]
+}
