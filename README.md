@@ -137,7 +137,7 @@ MIT (code). BRFSS data are public-domain CDC releases; respondents are
 de-identified. This repository never redistributes raw CDC files.
 
 
-## Release v2.0.0 — npj Digital Medicine revision
+## Release v2.0.0 — npj Digital Medicine 
 
 This version adds every analysis introduced in this run:
 
