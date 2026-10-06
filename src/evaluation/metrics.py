@@ -99,8 +99,13 @@ def _midrank(x):
 
 
 def delong_test(y, p1, p2):
-    """Paired DeLong test for AUC(p1) vs AUC(p2). Returns (auc1, auc2, p)."""
+    """Paired DeLong test for AUC(p1) vs AUC(p2). Returns (auc1, auc2, p).
+    Positives are moved first: the fast algorithm requires it, and the
+    saved prediction files are sorted by row_id, not by class."""
     y = np.asarray(y)
+    order = np.concatenate([np.where(y == 1)[0], np.where(y == 0)[0]])
+    y = y[order]
+    p1, p2 = np.asarray(p1)[order], np.asarray(p2)[order]
     pos, neg = np.where(y == 1)[0], np.where(y == 0)[0]
     m, n = len(pos), len(neg)
     preds = np.vstack([np.asarray(p1), np.asarray(p2)])
@@ -108,9 +113,10 @@ def delong_test(y, p1, p2):
     tx, ty, tz = (np.empty((k, m)), np.empty((k, n)),
                   np.empty((k, m + n)))
     for r in range(k):
-        tx[r] = _midrank(preds[r, pos])
-        ty[r] = _midrank(preds[r, neg])
-        tz[r] = _midrank(preds[r])
+        px, pn = preds[r, pos], preds[r, neg]
+        tx[r] = _midrank(px)
+        ty[r] = _midrank(pn)
+        tz[r] = _midrank(np.concatenate([px, pn]))  # positives-first (required)
     aucs = tz[:, :m].sum(axis=1) / (m * n) - (m + 1.0) / (2.0 * n)
     v01 = (tz[:, :m] - tx) / n
     v10 = 1.0 - (tz[:, m:] - ty) / m

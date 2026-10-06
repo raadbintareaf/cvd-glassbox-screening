@@ -1,3 +1,4 @@
 defaults:
   context_size: 10000
   n_contexts: 8
+  predict_batch: 10000

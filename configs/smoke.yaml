@@ -1,6 +1,7 @@
 # Demo-scale smoke config: tiny subsample, CPU models, 1 seed. Runs in the
 # development container / laptop in ~2 minutes. NEVER a source of paper numbers.
 inherit: default.yaml
+results_dir: results_demo   # demo runs can never occupy paper keys
 limit: 8000
 seeds: [0]
 tiers: [T1]

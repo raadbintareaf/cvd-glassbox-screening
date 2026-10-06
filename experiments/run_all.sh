@@ -4,6 +4,7 @@
 set -uo pipefail
 CFG=${1:-configs/default.yaml}
 cd "$(dirname "$0")/.."
+[ -f .venv/bin/activate ] && source .venv/bin/activate
 
 echo "== [0/8] environment freeze =="
 mkdir -p results

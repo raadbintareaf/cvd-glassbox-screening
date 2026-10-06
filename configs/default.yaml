@@ -11,7 +11,7 @@ seeds: [0, 1, 2, 3, 4]
 tiers: [T0, T1, T1_portable, T2, T1_nostroke]
 drop_stroke: false            # ablation switch (rerun T1 with true)
 
-models: [ebm, logreg, logreg_spline, xgboost, lightgbm, mlp, tabpfn_v2, tabicl]
+models: [ebm, logreg, logreg_spline, random_forest, xgboost, lightgbm, catboost, mlp, tabpfn_v2, tabicl]
 
 # Threshold rules are selected on VALIDATION and frozen before test.
 operating_rules:
@@ -33,6 +33,8 @@ faithfulness_fm: tabicl
 tuning_trials:
   xgboost: 30
   lightgbm: 30
+  catboost: 25
+  random_forest: 15
   ebm: 15
   mlp: 20
   logreg: 15

@@ -163,3 +163,17 @@ This version adds every analysis introduced in this run:
 
 Publish this release with `bash release_to_github_zenodo.sh`
 (see `INSTRUCTIONS.md`). DOI badge: _added after minting_.
+
+## Reproducing the decision-level analyses
+
+The screening-decision counts, person-level reclassification, subgroup
+sensitivity, calibration and temporal results reported in the paper are
+produced by `revision_jamiao/` from the saved test-set predictions:
+
+```bash
+# after experiments/run_all.sh has written results/predictions/
+bash revision_jamiao/run.sh
+```
+
+See `revision_jamiao/README_RUN.md` for details. The scripts read only the
+saved predictions and the public BRFSS files; no data are redistributed.

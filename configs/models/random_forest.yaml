@@ -1,0 +1,4 @@
+defaults:
+  n_estimators: 500
+  min_samples_leaf: 5
+  max_features: sqrt

@@ -109,6 +109,7 @@ def main():
     w = reweighing_weights(ytr, G[a.group].iloc[idx["train"]]
                            .reset_index(drop=True))
     rw = make_model(a.model, params, a.seed)
+    rw.extra_weight_ = w  # consumed by adapters with native sample-weight support
     try:
         # adapters use balanced weights internally; reweighing multiplies in
         from src.models import registry as R

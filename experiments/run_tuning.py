@@ -59,6 +59,20 @@ def space(trial, model):
                     dropout=trial.suggest_float("dropout", 0.0, 0.4),
                     lr=trial.suggest_float("lr", 3e-4, 3e-3, log=True),
                     wd=trial.suggest_float("wd", 1e-6, 1e-3, log=True))
+    if model == "catboost":
+        return dict(
+            iterations=trial.suggest_int("iterations", 300, 1500),
+            learning_rate=trial.suggest_float("learning_rate", 0.01, 0.2,
+                                              log=True),
+            depth=trial.suggest_int("depth", 4, 9),
+            l2_leaf_reg=trial.suggest_float("l2_leaf_reg", 1, 10, log=True))
+    if model == "random_forest":
+        return dict(
+            n_estimators=trial.suggest_int("n_estimators", 300, 800),
+            min_samples_leaf=trial.suggest_int("min_samples_leaf", 1, 50,
+                                               log=True),
+            max_features=trial.suggest_categorical("max_features",
+                                                   ["sqrt", 0.3, 0.5]))
     if model in ("logreg", "logreg_spline"):
         return dict(C=trial.suggest_float("C", 1e-3, 100, log=True))
     return {}  # foundation models: no tuning (defaults; that's the point)

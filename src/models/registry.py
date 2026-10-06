@@ -182,10 +182,12 @@ class XGBAdapter(_Base):
         self.model_ = xgb.XGBClassifier(**{k: v for k, v in p.items()
                                            if v is not None})
         Xc, Xvc = X.copy(), (Xv.copy() if Xv is not None else None)
+        sw = getattr(self, "extra_weight_", None)  # e.g. fairness reweighing
         if Xv is not None:
-            self.model_.fit(Xc, y, eval_set=[(Xvc, yv)], verbose=False)
+            self.model_.fit(Xc, y, sample_weight=sw,
+                            eval_set=[(Xvc, yv)], verbose=False)
         else:
-            self.model_.fit(Xc, y, verbose=False)
+            self.model_.fit(Xc, y, sample_weight=sw, verbose=False)
         return self
 
     def predict_proba_pos(self, X):
@@ -296,6 +298,28 @@ class MLPAdapter(_Base):
                    Path(d) / "mlp.pt")
         joblib.dump(self.pipe_, Path(d) / "pipe.joblib")
 
+    @staticmethod
+    def load(d: str):
+        import torch
+        import torch.nn as nn
+        ckpt = torch.load(Path(d) / "mlp.pt", map_location="cpu",
+                          weights_only=False)
+        m = MLPAdapter(ckpt["params"], ckpt["seed"])
+        m.pipe_ = joblib.load(Path(d) / "pipe.joblib")
+        width = m.params.get("width", 256)
+        depth = m.params.get("depth", 3)
+        drop = m.params.get("dropout", 0.2)
+        layers, d_in = [], len(m.pipe_.feature_names())
+        for _ in range(depth):
+            layers += [nn.Linear(d_in, width), nn.ReLU(), nn.Dropout(drop)]
+            d_in = width
+        layers += [nn.Linear(d_in, 1)]
+        m.net_ = nn.Sequential(*layers)
+        m.net_.load_state_dict(ckpt["state"])
+        m.device_ = "cuda" if torch.cuda.is_available() else "cpu"
+        m.net_.to(m.device_).eval()
+        return m
+
 
 class TabPFNAdapter(_Base):
     """TabPFN v2 (Hollmann et al., Nature 2025) with a stratified
@@ -327,9 +351,11 @@ class TabPFNAdapter(_Base):
 
     def predict_proba_pos(self, X):
         M, _ = to_codes_matrix(X)
+        bs = int(self.params.get("predict_batch", 10000))
         preds = np.zeros(len(M))
         for clf in self.members_:
-            preds += clf.predict_proba(M)[:, 1]
+            for i in range(0, len(M), bs):
+                preds[i:i + bs] += clf.predict_proba(M[i:i + bs])[:, 1]
         return preds / len(self.members_)
 
     def save(self, d):  # FMs are cheap to refit; persist config only
@@ -363,8 +389,66 @@ class TabICLAdapter(_Base):
                     Path(d) / "fm_config.joblib")
 
 
+
+
+class CatBoostAdapter(_Base):
+    name = "catboost"
+
+    @staticmethod
+    def _prep(X):
+        Xc = X.copy()
+        for c in Xc.columns:
+            if isinstance(Xc[c].dtype, pd.CategoricalDtype):
+                Xc[c] = (Xc[c].cat.add_categories(["__MISSING__"])
+                         .fillna("__MISSING__").astype(str))
+        return Xc
+
+    def fit(self, X, y, Xv=None, yv=None):
+        from catboost import CatBoostClassifier
+        Xc = self._prep(X)
+        Xvc = self._prep(Xv) if Xv is not None else None
+        self.cat_idx_ = [i for i, c in enumerate(X.columns)
+                         if isinstance(X[c].dtype, pd.CategoricalDtype)]
+        p = dict(iterations=self.params.get("iterations", 1000),
+                 learning_rate=self.params.get("learning_rate", 0.05),
+                 depth=self.params.get("depth", 6),
+                 l2_leaf_reg=self.params.get("l2_leaf_reg", 3.0),
+                 auto_class_weights=self.params.get("auto_class_weights", "Balanced"), eval_metric="AUC",
+                 random_seed=self.seed, verbose=False,
+                 allow_writing_files=False, thread_count=-1)
+        self.model_ = CatBoostClassifier(**p)
+        self.model_.fit(Xc, y, cat_features=self.cat_idx_,
+                        sample_weight=getattr(self, 'extra_weight_', None),
+                        eval_set=(Xvc, yv) if Xvc is not None else None,
+                        early_stopping_rounds=50 if Xvc is not None else None)
+        return self
+
+    def predict_proba_pos(self, X):
+        return self.model_.predict_proba(self._prep(X))[:, 1]
+
+
+class RandomForestAdapter(_Base):
+    name = "random_forest"
+
+    def fit(self, X, y, Xv=None, yv=None):
+        from sklearn.ensemble import RandomForestClassifier
+        self.pipe_ = OneHotPipe().fit(X)
+        self.model_ = RandomForestClassifier(
+            n_estimators=self.params.get("n_estimators", 500),
+            min_samples_leaf=self.params.get("min_samples_leaf", 5),
+            max_features=self.params.get("max_features", "sqrt"),
+            class_weight="balanced_subsample", n_jobs=-2,
+            random_state=self.seed)
+        self.model_.fit(self.pipe_.transform(X), y)
+        return self
+
+    def predict_proba_pos(self, X):
+        return self.model_.predict_proba(self.pipe_.transform(X))[:, 1]
+
+
 REGISTRY = {c.name: c for c in
             [EBMAdapter, LogRegAdapter, LogRegSplineAdapter, XGBAdapter,
+             CatBoostAdapter, RandomForestAdapter,
              LGBMAdapter, MLPAdapter, TabPFNAdapter, TabICLAdapter]}
 
 

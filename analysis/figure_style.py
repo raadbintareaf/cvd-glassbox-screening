@@ -16,16 +16,20 @@ PALETTE = {
     "mlp": "#CC79A7",          # purple-pink
     "tabpfn_v2": "#009E73",    # green
     "tabicl": "#56B4E9",       # sky
+    "catboost": "#F0E442",     # yellow
+    "random_forest": "#000000",
     "logreg": "#999999",       # grey
     "logreg_spline": "#666666",
     "neutral": "#000000",
     "accent": "#F0E442",       # yellow (highlights only)
 }
-MODEL_ORDER = ["logreg", "logreg_spline", "ebm", "xgboost", "lightgbm",
-               "mlp", "tabpfn_v2", "tabicl"]
+MODEL_ORDER = ["logreg", "logreg_spline", "random_forest", "ebm",
+               "xgboost", "lightgbm", "catboost", "mlp", "tabpfn_v2",
+               "tabicl"]
 MODEL_LABEL = {
     "logreg": "LogReg", "logreg_spline": "LogReg (splines)", "ebm": "EBM",
-    "xgboost": "XGBoost", "lightgbm": "LightGBM", "mlp": "MLP",
+    "xgboost": "XGBoost", "lightgbm": "LightGBM", "mlp": "MLP", "catboost": "CatBoost",
+    "random_forest": "Random Forest",
     "tabpfn_v2": "TabPFN v2", "tabicl": "TabICL",
 }
 TIER_LABEL = {"T0": "T0 (full, incl. post-dx)", "T1": "T1 (screening)",

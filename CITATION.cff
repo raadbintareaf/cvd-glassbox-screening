@@ -1,26 +1,22 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite it as below."
 title: "cvd-glassbox-screening: leakage-tiered, fairness-audited benchmark of glass-box and tabular foundation models on BRFSS"
-version: 2.0.0
+version: 2.1.0
 date-released: 2026-08-13
 license: MIT
 authors:
   - family-names: "Bin Tareaf"
     given-names: "Raad"
     affiliation: "XU Exponential University of Applied Sciences; Abu Dhabi University"
-    orcid: "https://orcid.org/0000-0000-0000-0000"  # TODO
+    orcid: "https://orcid.org/0000-0002-2804-3243"
   - family-names: "Al-Rajab"
     given-names: "Murad"
     affiliation: "Abu Dhabi University"
-    orcid: "https://orcid.org/0000-0000-0000-0000"  # TODO
   - family-names: "Loucif"
     given-names: "Samia"
     affiliation: "Zayed University"
-    orcid: "https://orcid.org/0000-0000-0000-0000"  # TODO
   - family-names: "Ellaham"
     given-names: "Samer"
-    orcid: "https://orcid.org/0000-0000-0000-0000"  # TODO
   - family-names: "Schmitz"
     given-names: "Cedric"
     affiliation: "XU Exponential University of Applied Sciences"
-    orcid: "https://orcid.org/0000-0000-0000-0000"  # TODO

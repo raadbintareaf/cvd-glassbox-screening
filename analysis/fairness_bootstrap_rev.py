@@ -8,7 +8,7 @@ rng = np.random.default_rng(0)
 rows = []
 for model in ["ebm","xgboost"]:
     d = Path(f"results/revision/fairness_v2/{model}/Sex/seed0")
-    y = np.load(d/"y_test.npy"); g = np.load(d/"g_test.npy")
+    y = np.load(d/"y_test.npy", allow_pickle=True).astype(int); g = np.load(d/"g_test.npy", allow_pickle=True).astype(str)
     P = np.load(d/"arm_probs.npz")
     thr = json.load(open(d/"thresholds.json"))
     arms = list(P.files)

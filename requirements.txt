@@ -29,5 +29,5 @@ pyreadstat>=1.2           # fast XPT reader (encoding='LATIN1' required)
 #   pip install torch --index-url https://download.pytorch.org/whl/cu124
 # then:
 torch>=2.3                # also used by the MLP baseline
-tabpfn>=2.0               # TabPFN v2 (Hollmann et al., Nature 2025)
+tabpfn>=2.0,<3        # TabPFN v2 weights (Hollmann et al., Nature 2025); >=2.5 model lines are token-gated
 tabicl>=0.1.1             # TabICL (Qu et al., ICML 2025)

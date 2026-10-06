@@ -1,6 +1,6 @@
-results/
-paper/
-data/
+/results/
+/paper/
+/data/
 *.pyc
 __pycache__/
 .ipynb_checkpoints/

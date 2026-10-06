@@ -122,7 +122,7 @@ def main():
     p_te = m.predict_proba_pos(Xte)
     pred_s = time.time() - t0
 
-    # thresholds selected on VALIDATION only (pre-specified rules)
+    # thresholds selected on VALIDATION only (pre-registered rules)
     thr = {r["name"]: threshold_for(yva, p_va, r["rule"], r["target"])
            for r in cfg["operating_rules"]}
 
