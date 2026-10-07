@@ -1,7 +1,7 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite it as below."
 title: "cvd-glassbox-screening: leakage-tiered, fairness-audited benchmark of glass-box and tabular foundation models on BRFSS"
-version: 2.1.0
+version: 2.2.0
 date-released: 2026-08-13
 license: MIT
 authors:

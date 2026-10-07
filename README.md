@@ -177,3 +177,15 @@ bash revision_jamiao/run.sh
 
 See `revision_jamiao/README_RUN.md` for details. The scripts read only the
 saved predictions and the public BRFSS files; no data are redistributed.
+
+## Analyses for the BMC Medical Informatics and Decision Making submission
+
+`revision_bmc/` adds the analyses of respondents without either item (thresholds set
+on all respondents or on that group, single-item removal, models trained in that group,
+decision curves, subgroups within age groups, group-specific thresholds, survey weights
+and the strict-definition and threshold-uncertainty checks):
+
+```bash
+bash revision_bmc/run.sh      # main additional analyses (retrains the classical models)
+bash revision_bmc/run2.sh     # strict definition, threshold bootstrap, group recalibration
+```
